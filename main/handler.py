@@ -3,11 +3,14 @@ import io
 from gtts import gTTS
 from pydub import AudioSegment
 import logging
+import os
 
-def rwtv(text, diagnostics=False):
+def handle(text):
     """Convert text to speech and return Base64 encoded audio."""
+    diagnostics = os.getenv("DIAGNOSTICS", "false").lower() == "true"
+    log_path = os.getenv("LOG_FILE", "/tmp/RWTV.log")
     if diagnostics:
-        logging.basicConfig(filename='rwtv_log.log', level=logging.INFO, format='%(asctime)s - %(message)s')
+        logging.basicConfig(log_path, level=logging.INFO, format='%(asctime)s - %(message)s')
     
     def log_event(message, error_message=None):
         if diagnostics:
